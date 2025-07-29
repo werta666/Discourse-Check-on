@@ -1,0 +1,34 @@
+zh_CN:
+  site_settings:
+    discourse_check_on_enabled: "启用Discourse Check-on插件"
+    discourse_check_on_feature_level: "插件功能级别"
+    discourse_check_on_auto_greeting: "自动为新用户显示欢迎消息"
+    discourse_check_on_display_stats: "在插件界面中显示统计信息"
+    discourse_check_on_custom_message: "自定义显示消息内容"
+    
+  discourse_check_on:
+    # 基本消息
+    welcome: "欢迎使用Discourse Check-on插件！这是一个功能丰富的示例插件，展示了Discourse插件开发的最佳实践。"
+    greeting: "你好，%{username}！欢迎使用我们的插件。"
+    
+    # 错误消息
+    admin_required: "此操作需要管理员权限"
+    plugin_not_enabled: "插件未启用"
+    invalid_request: "无效的请求"
+    
+    # 日志消息
+    user_created: "新用户已创建：%{username}"
+    topic_created: "新主题已创建：%{title}"
+    plugin_enabled: "Discourse Check-on插件已启用"
+    plugin_disabled: "Discourse Check-on插件已禁用"
+    
+    # 状态消息
+    status_updated: "状态已更新"
+    settings_saved: "设置已保存"
+    data_refreshed: "数据已刷新"
+    
+    # 功能描述
+    features:
+      basic: "基础功能包括用户问候和基本统计"
+      advanced: "高级功能包括主题状态跟踪和自定义消息"
+      premium: "专业功能包括完整的分析和高级自定义选项"

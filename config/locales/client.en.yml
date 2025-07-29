@@ -1,0 +1,73 @@
+en:
+  js:
+    discourse_check_on:
+      # Basic labels and titles
+      plugin_title: "Discourse Check-on Plugin"
+      plugin_description: "A feature-rich Discourse example plugin that demonstrates best practices and various functionality implementations."
+      
+      # Status related
+      status_enabled: "Enabled"
+      status_disabled: "Disabled"
+      enabled: "Enabled"
+      disabled: "Disabled"
+      
+      # Loading and actions
+      loading: "Loading..."
+      load_stats: "Load Statistics"
+      refresh: "Refresh"
+      retry: "Retry"
+      
+      # Error messages
+      error_loading: "Error loading data"
+      failed_to_load: "Failed to load plugin data"
+      admin_required: "This action requires administrator privileges"
+      
+      # Plugin actions
+      enable_plugin: "Enable Plugin"
+      disable_plugin: "Disable Plugin"
+      plugin_enabled: "Plugin has been successfully enabled"
+      plugin_disabled: "Plugin has been successfully disabled"
+      
+      # Settings related
+      current_settings: "Current Settings"
+      feature_level: "Feature Level"
+      auto_greeting: "Auto Greeting"
+      
+      # Feature levels
+      feature_levels:
+        basic: "Basic"
+        advanced: "Advanced"
+        premium: "Premium"
+      
+      # Admin actions
+      admin_actions: "Admin Actions"
+      
+      # Statistics
+      plugin_stats: "Plugin Statistics"
+      total_users: "Total Users"
+      active_users: "Active Users"
+      total_topics: "Total Topics"
+      check_on_topics: "Check-on Topics"
+      
+      # Welcome messages
+      welcome_title: "Welcome to Discourse Check-on!"
+      welcome_message: "Hello %{username}! Welcome to our community. This plugin will help you make better use of Discourse."
+      
+      # Topic status
+      topic_status:
+        new: "New"
+        featured: "Featured"
+        archived: "Archived"
+        normal: "Normal"
+      
+      # Plugin info
+      about_plugin: "About Plugin"
+      version: "Version"
+      author: "Author"
+      github_repo: "GitHub Repository"
+      
+      # User greeting
+      greeting: "Hello, %{username}!"
+      
+      # Other messages
+      welcome: "Welcome to Discourse Check-on Plugin! This is a feature-rich example plugin."

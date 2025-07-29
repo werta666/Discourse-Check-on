@@ -1,0 +1,34 @@
+en:
+  site_settings:
+    discourse_check_on_enabled: "Enable Discourse Check-on Plugin"
+    discourse_check_on_feature_level: "Plugin Feature Level"
+    discourse_check_on_auto_greeting: "Automatically show welcome message for new users"
+    discourse_check_on_display_stats: "Display statistics in plugin interface"
+    discourse_check_on_custom_message: "Custom display message content"
+    
+  discourse_check_on:
+    # Basic messages
+    welcome: "Welcome to Discourse Check-on Plugin! This is a feature-rich example plugin that demonstrates best practices in Discourse plugin development."
+    greeting: "Hello, %{username}! Welcome to our plugin."
+    
+    # Error messages
+    admin_required: "This action requires administrator privileges"
+    plugin_not_enabled: "Plugin is not enabled"
+    invalid_request: "Invalid request"
+    
+    # Log messages
+    user_created: "New user created: %{username}"
+    topic_created: "New topic created: %{title}"
+    plugin_enabled: "Discourse Check-on Plugin has been enabled"
+    plugin_disabled: "Discourse Check-on Plugin has been disabled"
+    
+    # Status messages
+    status_updated: "Status updated"
+    settings_saved: "Settings saved"
+    data_refreshed: "Data refreshed"
+    
+    # Feature descriptions
+    features:
+      basic: "Basic features include user greetings and basic statistics"
+      advanced: "Advanced features include topic status tracking and custom messages"
+      premium: "Premium features include full analytics and advanced customization options"

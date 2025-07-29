@@ -1,0 +1,90 @@
+{{#if isLoading}}
+  <div class="discourse-check-on-loading">
+    {{loading-spinner size="small"}}
+    <span>{{i18n "discourse_check_on.loading"}}</span>
+  </div>
+{{else}}
+  {{#if pluginData}}
+    <div class="discourse-check-on-content">
+      <div class="plugin-header">
+        <h2>{{i18n "discourse_check_on.plugin_title"}}</h2>
+        <div class="plugin-status {{if pluginData.enabled 'enabled' 'disabled'}}">
+          {{#if pluginData.enabled}}
+            {{d-icon "check-circle"}}
+            <span>{{i18n "discourse_check_on.status_enabled"}}</span>
+          {{else}}
+            {{d-icon "times-circle"}}
+            <span>{{i18n "discourse_check_on.status_disabled"}}</span>
+          {{/if}}
+        </div>
+      </div>
+
+      <div class="plugin-message">
+        <p>{{pluginData.message}}</p>
+      </div>
+
+      <div class="plugin-settings">
+        <h3>{{i18n "discourse_check_on.current_settings"}}</h3>
+        <ul class="settings-list">
+          <li>
+            <strong>{{i18n "discourse_check_on.feature_level"}}:</strong>
+            <span class="feature-level-{{pluginData.feature_level}}">
+              {{i18n (concat "discourse_check_on.feature_levels." pluginData.feature_level)}}
+            </span>
+          </li>
+          <li>
+            <strong>{{i18n "discourse_check_on.auto_greeting"}}:</strong>
+            {{#if pluginData.auto_greeting}}
+              {{d-icon "check"}} {{i18n "discourse_check_on.enabled"}}
+            {{else}}
+              {{d-icon "times"}} {{i18n "discourse_check_on.disabled"}}
+            {{/if}}
+          </li>
+        </ul>
+      </div>
+
+      {{#if currentUser.admin}}
+        <div class="plugin-actions">
+          <h3>{{i18n "discourse_check_on.admin_actions"}}</h3>
+          <div class="action-buttons">
+            {{d-button
+              class="btn-primary"
+              action=(action "togglePlugin")
+              label=(if pluginData.enabled "discourse_check_on.disable_plugin" "discourse_check_on.enable_plugin")
+              icon=(if pluginData.enabled "times" "check")
+            }}
+            
+            {{d-button
+              class="btn-default"
+              action=(action "refreshData")
+              label="discourse_check_on.refresh"
+              icon="sync"
+            }}
+          </div>
+        </div>
+      {{/if}}
+
+      <div class="plugin-info">
+        <h3>{{i18n "discourse_check_on.about_plugin"}}</h3>
+        <p>{{i18n "discourse_check_on.plugin_description"}}</p>
+        <div class="plugin-meta">
+          <span class="version">{{i18n "discourse_check_on.version"}}: 1.0.0</span>
+          <span class="author">{{i18n "discourse_check_on.author"}}: Pandacc</span>
+          <a href="https://github.com/werta666/Discourse-Check-on" target="_blank" class="github-link">
+            {{d-icon "fab-github"}} {{i18n "discourse_check_on.github_repo"}}
+          </a>
+        </div>
+      </div>
+    </div>
+  {{else}}
+    <div class="discourse-check-on-error">
+      <p>{{i18n "discourse_check_on.failed_to_load"}}</p>
+      {{d-button
+        class="btn-default"
+        action=(action "refreshData")
+        label="discourse_check_on.retry"
+        icon="sync"
+      }}
+    </div>
+  {{/if}}
+{{/if}}

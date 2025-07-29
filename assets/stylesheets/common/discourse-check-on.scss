@@ -1,0 +1,337 @@
+// Discourse Check-on 插件通用样式
+
+// 主要颜色变量
+:root {
+  --discourse-check-on-primary: #007bff;
+  --discourse-check-on-success: #28a745;
+  --discourse-check-on-warning: #ffc107;
+  --discourse-check-on-danger: #dc3545;
+  --discourse-check-on-info: #17a2b8;
+  --discourse-check-on-light: #f8f9fa;
+  --discourse-check-on-dark: #343a40;
+}
+
+// 插件面板样式
+.discourse-check-on-panel {
+  background: var(--secondary);
+  border: 1px solid var(--primary-low);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  .plugin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--primary-low);
+
+    h2 {
+      margin: 0;
+      color: var(--primary);
+      font-size: 1.5em;
+      font-weight: 600;
+    }
+
+    .plugin-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 500;
+      font-size: 0.9em;
+
+      &.enabled {
+        background: var(--discourse-check-on-success);
+        color: white;
+      }
+
+      &.disabled {
+        background: var(--discourse-check-on-danger);
+        color: white;
+      }
+
+      .d-icon {
+        font-size: 1.1em;
+      }
+    }
+  }
+
+  .plugin-message {
+    background: var(--discourse-check-on-light);
+    border-left: 4px solid var(--discourse-check-on-primary);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 0 4px 4px 0;
+
+    p {
+      margin: 0;
+      color: var(--primary);
+      font-size: 1.1em;
+    }
+  }
+
+  .plugin-settings {
+    margin-bottom: 25px;
+
+    h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-size: 1.2em;
+      font-weight: 600;
+    }
+
+    .settings-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid var(--primary-low);
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        strong {
+          color: var(--primary);
+        }
+
+        .feature-level-basic {
+          color: var(--discourse-check-on-info);
+          font-weight: 500;
+        }
+
+        .feature-level-advanced {
+          color: var(--discourse-check-on-warning);
+          font-weight: 500;
+        }
+
+        .feature-level-premium {
+          color: var(--discourse-check-on-success);
+          font-weight: 500;
+        }
+
+        .d-icon {
+          margin-right: 5px;
+        }
+      }
+    }
+  }
+
+  .plugin-actions {
+    margin-bottom: 25px;
+
+    h3 {
+      color: var(--primary);
+      margin-bottom: 15px;
+      font-size: 1.2em;
+      font-weight: 600;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+
+      .btn {
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+  }
+
+  .plugin-info {
+    .plugin-meta {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      margin-top: 15px;
+      padding: 15px;
+      background: var(--primary-very-low);
+      border-radius: 6px;
+      flex-wrap: wrap;
+
+      .version,
+      .author {
+        color: var(--primary-medium);
+        font-size: 0.9em;
+        font-weight: 500;
+      }
+
+      .github-link {
+        color: var(--discourse-check-on-primary);
+        text-decoration: none;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        &:hover {
+          text-decoration: underline;
+        }
+
+        .d-icon {
+          font-size: 1.1em;
+        }
+      }
+    }
+  }
+}
+
+// 加载状态样式
+.discourse-check-on-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px;
+  color: var(--primary-medium);
+
+  span {
+    font-size: 1.1em;
+  }
+}
+
+// 错误状态样式
+.discourse-check-on-error {
+  text-align: center;
+  padding: 40px;
+  color: var(--discourse-check-on-danger);
+
+  p {
+    margin-bottom: 20px;
+    font-size: 1.1em;
+  }
+}
+
+// 统计信息组件样式
+.discourse-check-on-stats {
+  background: var(--secondary);
+  border: 1px solid var(--primary-low);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+
+  .discourse-check-on-info {
+    h3 {
+      margin: 0 0 15px 0;
+      color: var(--primary);
+      font-size: 1.3em;
+      text-align: center;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+
+      .stat-item {
+        text-align: center;
+        padding: 15px;
+        background: var(--primary-very-low);
+        border-radius: 6px;
+        border: 1px solid var(--primary-low);
+
+        .stat-number {
+          display: block;
+          font-size: 2em;
+          font-weight: bold;
+          color: var(--discourse-check-on-primary);
+          margin-bottom: 5px;
+        }
+
+        .stat-label {
+          display: block;
+          color: var(--primary-medium);
+          font-size: 0.9em;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  .discourse-check-on-load-btn {
+    display: block;
+    margin: 0 auto;
+    padding: 12px 24px;
+    font-size: 1.1em;
+  }
+}
+
+// 主题状态指示器
+.discourse-check-on-topic-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 500;
+  margin-left: 8px;
+
+  &.status-new {
+    background: var(--discourse-check-on-success);
+    color: white;
+  }
+
+  &.status-featured {
+    background: var(--discourse-check-on-warning);
+    color: white;
+  }
+
+  &.status-archived {
+    background: var(--discourse-check-on-info);
+    color: white;
+  }
+
+  .d-icon {
+    font-size: 0.9em;
+  }
+
+  .status-text {
+    font-size: 0.85em;
+  }
+}
+
+// 导航链接样式
+.discourse-check-on-link {
+  color: var(--primary) !important;
+  
+  &:hover {
+    color: var(--discourse-check-on-primary) !important;
+  }
+
+  .d-icon {
+    color: var(--discourse-check-on-success);
+  }
+}
+
+// 欢迎模态框样式
+.discourse-check-on-welcome-modal {
+  .modal-header {
+    background: linear-gradient(135deg, var(--discourse-check-on-primary), var(--discourse-check-on-info));
+    color: white;
+    border-radius: 8px 8px 0 0;
+  }
+
+  .modal-body {
+    padding: 25px;
+    font-size: 1.1em;
+    line-height: 1.6;
+  }
+}

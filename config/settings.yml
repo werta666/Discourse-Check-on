@@ -1,0 +1,33 @@
+plugins:
+  discourse_check_on_enabled:
+    default: true
+    client: true
+    description: "启用Discourse Check-on插件的主要功能"
+    
+  discourse_check_on_feature_level:
+    type: enum
+    default: "basic"
+    choices:
+      - basic
+      - advanced
+      - premium
+    client: true
+    description: "选择插件功能级别：基础版、高级版或专业版"
+    
+  discourse_check_on_auto_greeting:
+    default: false
+    client: true
+    description: "自动为新用户显示欢迎消息"
+    
+  discourse_check_on_display_stats:
+    default: true
+    client: true
+    description: "在插件界面中显示统计信息"
+    
+  discourse_check_on_custom_message:
+    default: "欢迎使用Discourse Check-on插件！"
+    client: true
+    description: "自定义显示消息内容"
+    locale_default:
+      en: "Welcome to Discourse Check-on Plugin!"
+      zh_CN: "欢迎使用Discourse Check-on插件！"

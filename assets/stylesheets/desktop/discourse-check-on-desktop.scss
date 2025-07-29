@@ -1,0 +1,126 @@
+// Discourse Check-on 插件桌面端样式
+
+// 桌面端特定的插件面板样式
+.discourse-check-on-panel {
+  max-width: 1200px;
+  margin: 20px auto;
+
+  .plugin-header {
+    .plugin-status {
+      min-width: 120px;
+      justify-content: center;
+    }
+  }
+
+  .plugin-actions {
+    .action-buttons {
+      justify-content: flex-start;
+
+      .btn {
+        min-width: 140px;
+        justify-content: center;
+      }
+    }
+  }
+
+  .plugin-info {
+    .plugin-meta {
+      justify-content: space-between;
+
+      .version,
+      .author {
+        flex: 0 0 auto;
+      }
+
+      .github-link {
+        margin-left: auto;
+      }
+    }
+  }
+}
+
+// 桌面端统计信息网格
+.discourse-check-on-stats {
+  .discourse-check-on-info {
+    .stats-grid {
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 800px;
+      margin: 0 auto;
+
+      .stat-item {
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-number {
+          font-size: 2.5em;
+        }
+
+        .stat-label {
+          font-size: 1em;
+        }
+      }
+    }
+  }
+}
+
+// 桌面端导航链接
+.discourse-check-on-link {
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: var(--primary-very-low);
+  }
+}
+
+// 桌面端主题状态指示器
+.discourse-check-on-topic-status {
+  .status-text {
+    display: inline;
+  }
+}
+
+// 桌面端欢迎模态框
+.discourse-check-on-welcome-modal {
+  .modal-dialog {
+    max-width: 600px;
+  }
+
+  .modal-body {
+    padding: 30px;
+    font-size: 1.2em;
+  }
+}
+
+// 桌面端响应式调整
+@media (min-width: 1024px) {
+  .discourse-check-on-panel {
+    .plugin-settings {
+      .settings-list {
+        li {
+          padding: 15px 0;
+        }
+      }
+    }
+  }
+}
+
+@media (min-width: 1200px) {
+  .discourse-check-on-stats {
+    .discourse-check-on-info {
+      .stats-grid {
+        gap: 20px;
+
+        .stat-item {
+          padding: 25px;
+        }
+      }
+    }
+  }
+}

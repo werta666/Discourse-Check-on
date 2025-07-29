@@ -1,0 +1,248 @@
+// Discourse Check-on 插件移动端样式
+
+// 移动端特定的插件面板样式
+.discourse-check-on-panel {
+  margin: 10px;
+  padding: 15px;
+
+  .plugin-header {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+
+    h2 {
+      font-size: 1.3em;
+    }
+
+    .plugin-status {
+      align-self: center;
+      min-width: auto;
+    }
+  }
+
+  .plugin-message {
+    padding: 12px;
+    margin-bottom: 15px;
+
+    p {
+      font-size: 1em;
+    }
+  }
+
+  .plugin-settings {
+    margin-bottom: 20px;
+
+    h3 {
+      font-size: 1.1em;
+    }
+
+    .settings-list {
+      li {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        padding: 10px 0;
+
+        strong {
+          font-size: 0.95em;
+        }
+      }
+    }
+  }
+
+  .plugin-actions {
+    margin-bottom: 20px;
+
+    h3 {
+      font-size: 1.1em;
+    }
+
+    .action-buttons {
+      flex-direction: column;
+      gap: 8px;
+
+      .btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 1em;
+      }
+    }
+  }
+
+  .plugin-info {
+    h3 {
+      font-size: 1.1em;
+    }
+
+    .plugin-meta {
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 12px;
+
+      .version,
+      .author,
+      .github-link {
+        width: 100%;
+        text-align: center;
+      }
+
+      .github-link {
+        margin-left: 0;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+// 移动端统计信息网格
+.discourse-check-on-stats {
+  margin: 10px;
+  padding: 15px;
+
+  .discourse-check-on-info {
+    h3 {
+      font-size: 1.2em;
+      margin-bottom: 12px;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+
+      .stat-item {
+        padding: 12px;
+
+        .stat-number {
+          font-size: 1.8em;
+        }
+
+        .stat-label {
+          font-size: 0.85em;
+        }
+      }
+    }
+  }
+
+  .discourse-check-on-load-btn {
+    padding: 10px 20px;
+    font-size: 1em;
+  }
+}
+
+// 移动端主题状态指示器
+.discourse-check-on-topic-status {
+  padding: 3px 6px;
+  font-size: 0.75em;
+
+  .status-text {
+    display: none; // 在移动端隐藏文字，只显示图标
+  }
+
+  .d-icon {
+    font-size: 1em;
+  }
+}
+
+// 移动端导航链接
+.discourse-check-on-link {
+  padding: 6px 8px;
+  
+  .d-icon {
+    font-size: 1.1em;
+  }
+}
+
+// 移动端欢迎模态框
+.discourse-check-on-welcome-modal {
+  .modal-dialog {
+    margin: 10px;
+    max-width: calc(100vw - 20px);
+  }
+
+  .modal-body {
+    padding: 20px;
+    font-size: 1em;
+    line-height: 1.5;
+  }
+}
+
+// 移动端加载和错误状态
+.discourse-check-on-loading,
+.discourse-check-on-error {
+  padding: 30px 15px;
+
+  span,
+  p {
+    font-size: 1em;
+  }
+}
+
+// 移动端响应式调整
+@media (max-width: 480px) {
+  .discourse-check-on-stats {
+    .discourse-check-on-info {
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 8px;
+
+        .stat-item {
+          padding: 15px;
+
+          .stat-number {
+            font-size: 2em;
+          }
+
+          .stat-label {
+            font-size: 0.9em;
+          }
+        }
+      }
+    }
+  }
+
+  .discourse-check-on-panel {
+    margin: 5px;
+    padding: 12px;
+
+    .plugin-header {
+      h2 {
+        font-size: 1.2em;
+      }
+    }
+
+    .plugin-message {
+      padding: 10px;
+    }
+
+    .plugin-settings,
+    .plugin-actions,
+    .plugin-info {
+      h3 {
+        font-size: 1em;
+      }
+    }
+  }
+}
+
+// 触摸设备优化
+@media (hover: none) and (pointer: coarse) {
+  .discourse-check-on-stats {
+    .stat-item {
+      &:active {
+        transform: scale(0.98);
+        background: var(--primary-low);
+      }
+    }
+  }
+
+  .discourse-check-on-panel {
+    .action-buttons {
+      .btn {
+        &:active {
+          transform: scale(0.98);
+        }
+      }
+    }
+  }
+}

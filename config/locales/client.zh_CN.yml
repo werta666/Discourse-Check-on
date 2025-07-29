@@ -1,0 +1,73 @@
+zh_CN:
+  js:
+    discourse_check_on:
+      # 基本标签和标题
+      plugin_title: "Discourse Check-on 插件"
+      plugin_description: "一个功能丰富的Discourse示例插件，展示了插件开发的最佳实践和各种功能实现。"
+      
+      # 状态相关
+      status_enabled: "已启用"
+      status_disabled: "已禁用"
+      enabled: "已启用"
+      disabled: "已禁用"
+      
+      # 加载和操作
+      loading: "加载中..."
+      load_stats: "加载统计信息"
+      refresh: "刷新"
+      retry: "重试"
+      
+      # 错误信息
+      error_loading: "加载数据时出错"
+      failed_to_load: "无法加载插件数据"
+      admin_required: "此操作需要管理员权限"
+      
+      # 插件操作
+      enable_plugin: "启用插件"
+      disable_plugin: "禁用插件"
+      plugin_enabled: "插件已成功启用"
+      plugin_disabled: "插件已成功禁用"
+      
+      # 设置相关
+      current_settings: "当前设置"
+      feature_level: "功能级别"
+      auto_greeting: "自动欢迎"
+      
+      # 功能级别
+      feature_levels:
+        basic: "基础版"
+        advanced: "高级版"
+        premium: "专业版"
+      
+      # 管理员操作
+      admin_actions: "管理员操作"
+      
+      # 统计信息
+      plugin_stats: "插件统计信息"
+      total_users: "总用户数"
+      active_users: "活跃用户"
+      total_topics: "总主题数"
+      check_on_topics: "Check-on主题"
+      
+      # 欢迎消息
+      welcome_title: "欢迎使用Discourse Check-on！"
+      welcome_message: "你好 %{username}！欢迎来到我们的社区。这个插件将帮助你更好地使用Discourse。"
+      
+      # 主题状态
+      topic_status:
+        new: "新建"
+        featured: "精选"
+        archived: "已归档"
+        normal: "正常"
+      
+      # 插件信息
+      about_plugin: "关于插件"
+      version: "版本"
+      author: "作者"
+      github_repo: "GitHub仓库"
+      
+      # 用户问候
+      greeting: "你好，%{username}！"
+      
+      # 其他消息
+      welcome: "欢迎使用Discourse Check-on插件！这是一个功能丰富的示例插件。"
