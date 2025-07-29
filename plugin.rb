@@ -16,11 +16,17 @@ register_asset "stylesheets/mobile/discourse-check-on-mobile.scss", :mobile
 PLUGIN_NAME ||= "discourse-check-on".freeze
 
 after_initialize do
+  # 定义插件模块和常量
+  module ::DiscourseCheckOn
+    FIELD_NAME = "check_on_status"
+    FIELD_TYPE = :string
+  end
+
   # 注册自定义字段类型
-  register_topic_custom_field_type("check_on_status", :string)
+  register_topic_custom_field_type(DiscourseCheckOn::FIELD_NAME, DiscourseCheckOn::FIELD_TYPE)
 
   # 预加载自定义字段以避免N+1查询
-  add_preloaded_topic_list_custom_field("check_on_status")
+  add_preloaded_topic_list_custom_field(DiscourseCheckOn::FIELD_NAME)
 
   # 扩展用户模型，添加自定义方法
   User.class_eval do
@@ -29,16 +35,29 @@ after_initialize do
     end
   end
 
-  # 扩展主题模型，添加自定义字段
-  Topic.class_eval do
-    def check_on_status
-      return custom_fields["check_on_status"] || "normal"
+  # 添加getter和setter方法
+  add_to_class(:topic, DiscourseCheckOn::FIELD_NAME.to_sym) do
+    if !custom_fields[DiscourseCheckOn::FIELD_NAME].nil?
+      custom_fields[DiscourseCheckOn::FIELD_NAME]
+    else
+      "normal"  # 默认值
     end
+  end
 
-    def set_check_on_status(status)
-      custom_fields["check_on_status"] = status
-      save_custom_fields
-    end
+  add_to_class(:topic, "#{DiscourseCheckOn::FIELD_NAME}=") do |value|
+    custom_fields[DiscourseCheckOn::FIELD_NAME] = value
+  end
+
+  # 主题创建时更新字段
+  on(:topic_created) do |topic, opts, user|
+    topic.send("#{DiscourseCheckOn::FIELD_NAME}=".to_sym, opts[DiscourseCheckOn::FIELD_NAME.to_sym])
+    topic.save!
+  end
+
+  # 主题编辑时更新字段
+  PostRevisor.track_topic_field(DiscourseCheckOn::FIELD_NAME.to_sym) do |tc, value|
+    tc.record_change(DiscourseCheckOn::FIELD_NAME, tc.topic.send(DiscourseCheckOn::FIELD_NAME), value)
+    tc.topic.send("#{DiscourseCheckOn::FIELD_NAME}=".to_sym, value.present? ? value : nil)
   end
 
   # 添加自定义路由
@@ -116,7 +135,7 @@ after_initialize do
         total_users: User.count,
         active_users: User.where("last_seen_at > ?", 1.week.ago).count,
         total_topics: Topic.count,
-        check_on_topics: TopicCustomField.where(name: "check_on_status").count
+        check_on_topics: TopicCustomField.where(name: DiscourseCheckOn::FIELD_NAME).count
       }
       render json: stats
     end
@@ -128,13 +147,13 @@ after_initialize do
   end
 
   # 添加主题序列化器扩展
-  add_to_serializer(:topic_view, :check_on_status) do
-    object.topic.check_on_status if SiteSetting.discourse_check_on_enabled
+  add_to_serializer(:topic_view, DiscourseCheckOn::FIELD_NAME.to_sym) do
+    object.topic.send(DiscourseCheckOn::FIELD_NAME) if SiteSetting.discourse_check_on_enabled
   end
 
   # 添加主题列表序列化器扩展
-  add_to_serializer(:topic_list_item, :check_on_status) do
-    object.check_on_status if SiteSetting.discourse_check_on_enabled
+  add_to_serializer(:topic_list_item, DiscourseCheckOn::FIELD_NAME.to_sym) do
+    object.send(DiscourseCheckOn::FIELD_NAME) if SiteSetting.discourse_check_on_enabled
   end
 
   # 监听用户创建事件
