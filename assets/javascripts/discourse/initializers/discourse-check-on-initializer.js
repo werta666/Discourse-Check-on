@@ -1,12 +1,11 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
-import { ajax } from "discourse/lib/ajax";
-import { popupAjaxError } from "discourse/lib/ajax-error";
+import DiscourseCheckOnHeaderIcon from "../components/discourse-check-on-header-icon";
 
 export default {
   name: "discourse-check-on-initializer",
 
   initialize() {
-    withPluginApi("0.8.31", (api) => {
+    withPluginApi("1.34.0", (api) => {
       // 检查插件是否启用
       if (!api.container.lookup("site-settings:main").discourse_check_on_enabled) {
         return;
@@ -14,122 +13,8 @@ export default {
 
       console.log("Discourse Check-on 插件已初始化");
 
-      // 添加导航栏链接 - 使用正确的现代API
-      api.decorateWidget("header-icons:before", (helper) => {
-        const currentUser = api.getCurrentUser();
-        if (currentUser && (currentUser.admin || currentUser.moderator)) {
-          return helper.h("li", [
-            helper.h("a.icon.discourse-check-on-link", {
-              href: "/discourse-check-on",
-              title: I18n.t("discourse_check_on.plugin_title")
-            }, [
-              helper.h("svg.fa.d-icon.d-icon-check-circle", {
-                attributes: { "aria-hidden": "true" }
-              })
-            ])
-          ]);
-        }
-      });
-
-      // 在主题列表前添加插件信息
-      api.decorateWidget("topic-list:before", (helper) => {
-        const siteSettings = api.container.lookup("site-settings:main");
-
-        if (siteSettings.discourse_check_on_display_stats) {
-          return helper.attach("discourse-check-on-stats");
-        }
-      });
-
-      // 添加自定义组件
-      api.createWidget("discourse-check-on-stats", {
-        tagName: "div.discourse-check-on-stats",
-        
-        buildKey: () => "discourse-check-on-stats",
-        
-        defaultState() {
-          return {
-            loading: true,
-            stats: null,
-            error: null
-          };
-        },
-
-        buildClasses() {
-          return ["discourse-check-on-widget"];
-        },
-
-        html(_attrs, state) {
-          const h = this.h;
-
-          if (state.loading) {
-            return [
-              this.attach("button", {
-                className: "btn-primary discourse-check-on-load-btn",
-                label: "discourse_check_on.load_stats",
-                action: "loadStats"
-              })
-            ];
-          }
-
-          if (state.error) {
-            return [
-              h("div.discourse-check-on-error", [
-                h("p", I18n.t("discourse_check_on.error_loading")),
-                this.attach("button", {
-                  className: "btn-default",
-                  label: "discourse_check_on.retry",
-                  action: "loadStats"
-                })
-              ])
-            ];
-          }
-
-          if (state.stats) {
-            return [
-              h("div.discourse-check-on-info", [
-                h("h3", I18n.t("discourse_check_on.plugin_stats")),
-                h("div.stats-grid", [
-                  h("div.stat-item", [
-                    h("span.stat-number", state.stats.total_users),
-                    h("span.stat-label", I18n.t("discourse_check_on.total_users"))
-                  ]),
-                  h("div.stat-item", [
-                    h("span.stat-number", state.stats.active_users),
-                    h("span.stat-label", I18n.t("discourse_check_on.active_users"))
-                  ]),
-                  h("div.stat-item", [
-                    h("span.stat-number", state.stats.total_topics),
-                    h("span.stat-label", I18n.t("discourse_check_on.total_topics"))
-                  ]),
-                  h("div.stat-item", [
-                    h("span.stat-number", state.stats.check_on_topics),
-                    h("span.stat-label", I18n.t("discourse_check_on.check_on_topics"))
-                  ])
-                ])
-              ])
-            ];
-          }
-        },
-
-        loadStats() {
-          this.state.loading = true;
-          this.state.error = null;
-          this.scheduleRerender();
-
-          ajax("/discourse-check-on/stats")
-            .then((result) => {
-              this.state.stats = result;
-              this.state.loading = false;
-              this.scheduleRerender();
-            })
-            .catch((error) => {
-              this.state.error = error;
-              this.state.loading = false;
-              this.scheduleRerender();
-              popupAjaxError(error);
-            });
-        }
-      });
+      // 添加导航栏链接 - 使用新的headerIcons API
+      api.headerIcons.add("discourse-check-on", DiscourseCheckOnHeaderIcon, { before: "search" });
 
       // 为新用户显示欢迎消息
       const currentUser = api.getCurrentUser();
@@ -161,49 +46,21 @@ export default {
                 welcomeContent += "<br><br>" + I18n.t("discourse_check_on.premium_welcome_bonus");
               }
 
-              bootbox.alert({
-                title: I18n.t("discourse_check_on.welcome_title"),
-                message: welcomeContent,
-                className: "discourse-check-on-welcome-modal",
-                callback: function() {
-                  // 标记已显示过欢迎消息
-                  localStorage.setItem(welcomeShownKey, 'true');
-                }
-              });
+              if (window.bootbox) {
+                bootbox.alert({
+                  title: I18n.t("discourse_check_on.welcome_title"),
+                  message: welcomeContent,
+                  className: "discourse-check-on-welcome-modal",
+                  callback: function() {
+                    // 标记已显示过欢迎消息
+                    localStorage.setItem(welcomeShownKey, 'true');
+                  }
+                });
+              }
             }, 3000);
           }
         }
       }
-
-      // 添加主题状态指示器
-      api.decorateWidget("topic-list-item:after", (helper) => {
-        const topic = helper.getModel();
-        if (topic && topic.check_on_status && topic.check_on_status !== "normal") {
-          return helper.attach("discourse-check-on-topic-status", {
-            status: topic.check_on_status
-          });
-        }
-      });
-
-      // 主题状态组件
-      api.createWidget("discourse-check-on-topic-status", {
-        tagName: "span.discourse-check-on-topic-status",
-        
-        buildClasses(attrs) {
-          return [`status-${attrs.status}`];
-        },
-
-        html(attrs) {
-          const h = this.h;
-          const statusText = I18n.t(`discourse_check_on.topic_status.${attrs.status}`);
-          return [
-            h("svg.fa.d-icon.d-icon-info-circle", {
-              attributes: { "aria-hidden": "true" }
-            }),
-            h("span.status-text", statusText)
-          ];
-        }
-      });
     });
   }
 };

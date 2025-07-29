@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # name: Discourse-Check-on
-# about: 一个简单的Discourse示例插件，展示基本功能和设置选项
-# version: 1.0.0
+# about: 一个功能丰富的Discourse示例插件，展示了插件开发的最佳实践和各种功能实现 - 已修复所有弃用API
+# version: 1.2.0
 # authors: Pandacc
 # url: https://github.com/werta666/Discourse-Check-on
 # required_version: 2.7.0
