@@ -15,6 +15,10 @@ export default class DiscourseCheckOnHeaderIcon extends Component {
     );
   }
 
+  get buttonTitle() {
+    return I18n.t("discourse_check_on.plugin_title");
+  }
+
   <template>
     {{#if this.shouldShow}}
       <li>
@@ -22,7 +26,7 @@ export default class DiscourseCheckOnHeaderIcon extends Component {
           class="icon btn-flat discourse-check-on-link"
           @href="/discourse-check-on"
           @icon="check-circle"
-          @title={{I18n.t("discourse_check_on.plugin_title")}}
+          @title={{this.buttonTitle}}
         />
       </li>
     {{/if}}

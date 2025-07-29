@@ -17,6 +17,34 @@ export default class DiscourseCheckOnStats extends Component {
     return this.siteSettings.discourse_check_on_display_stats;
   }
 
+  get loadingText() {
+    return I18n.t("discourse_check_on.loading");
+  }
+
+  get errorText() {
+    return I18n.t("discourse_check_on.error_loading");
+  }
+
+  get pluginStatsTitle() {
+    return I18n.t("discourse_check_on.plugin_stats");
+  }
+
+  get totalUsersLabel() {
+    return I18n.t("discourse_check_on.total_users");
+  }
+
+  get activeUsersLabel() {
+    return I18n.t("discourse_check_on.active_users");
+  }
+
+  get totalTopicsLabel() {
+    return I18n.t("discourse_check_on.total_topics");
+  }
+
+  get checkOnTopicsLabel() {
+    return I18n.t("discourse_check_on.check_on_topics");
+  }
+
   @action
   async loadStats() {
     this.loading = true;
@@ -40,11 +68,11 @@ export default class DiscourseCheckOnStats extends Component {
           {{#if this.loading}}
             <div class="discourse-check-on-loading">
               <span class="spinner"></span>
-              {{I18n.t("discourse_check_on.loading")}}
+              {{this.loadingText}}
             </div>
           {{else if this.error}}
             <div class="discourse-check-on-error">
-              <span class="error-message">{{I18n.t("discourse_check_on.error_loading")}}</span>
+              <span class="error-message">{{this.errorText}}</span>
               <DButton
                 class="btn-small discourse-check-on-retry-btn"
                 @action={{this.loadStats}}
@@ -53,23 +81,23 @@ export default class DiscourseCheckOnStats extends Component {
             </div>
           {{else if this.stats}}
             <div class="discourse-check-on-info">
-              <h3>{{I18n.t("discourse_check_on.plugin_stats")}}</h3>
+              <h3>{{this.pluginStatsTitle}}</h3>
               <div class="stats-grid">
                 <div class="stat-item">
                   <span class="stat-number">{{this.stats.total_users}}</span>
-                  <span class="stat-label">{{I18n.t("discourse_check_on.total_users")}}</span>
+                  <span class="stat-label">{{this.totalUsersLabel}}</span>
                 </div>
                 <div class="stat-item">
                   <span class="stat-number">{{this.stats.active_users}}</span>
-                  <span class="stat-label">{{I18n.t("discourse_check_on.active_users")}}</span>
+                  <span class="stat-label">{{this.activeUsersLabel}}</span>
                 </div>
                 <div class="stat-item">
                   <span class="stat-number">{{this.stats.total_topics}}</span>
-                  <span class="stat-label">{{I18n.t("discourse_check_on.total_topics")}}</span>
+                  <span class="stat-label">{{this.totalTopicsLabel}}</span>
                 </div>
                 <div class="stat-item">
                   <span class="stat-number">{{this.stats.check_on_topics}}</span>
-                  <span class="stat-label">{{I18n.t("discourse_check_on.check_on_topics")}}</span>
+                  <span class="stat-label">{{this.checkOnTopicsLabel}}</span>
                 </div>
               </div>
               <DButton
