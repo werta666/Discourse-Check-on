@@ -1,6 +1,6 @@
 <%
   content_for :title do
-    t("discourse_check_on.plugin_title")
+    t("discourse_check_on.plugin_title", default: "Discourse Check-on 插件")
   end
 %>
 
@@ -103,20 +103,20 @@
 <div class="discourse-check-on-page">
   <div class="container">
     <div class="discourse-check-on-header">
-      <h1><%= t("discourse_check_on.plugin_title") %></h1>
-      <p class="plugin-description"><%= t("discourse_check_on.plugin_description") %></p>
+      <h1><%= t("discourse_check_on.plugin_title", default: "Discourse Check-on 插件") %></h1>
+      <p class="plugin-description"><%= t("discourse_check_on.plugin_description", default: "一个功能丰富的Discourse示例插件") %></p>
     </div>
 
     <!-- 插件面板组件 -->
     <div id="discourse-check-on-panel-container">
       <div class="discourse-check-on-panel">
         <div class="plugin-header">
-          <h2><%= t("discourse_check_on.plugin_title") %></h2>
+          <h2><%= t("discourse_check_on.plugin_title", default: "Discourse Check-on 插件") %></h2>
           <div class="plugin-status <%= @plugin_data[:enabled] ? 'enabled' : 'disabled' %>">
             <% if @plugin_data[:enabled] %>
-              ✓ <%= t("discourse_check_on.status_enabled") %>
+              ✓ <%= t("discourse_check_on.status_enabled", default: "已启用") %>
             <% else %>
-              ✗ <%= t("discourse_check_on.status_disabled") %>
+              ✗ <%= t("discourse_check_on.status_disabled", default: "已禁用") %>
             <% end %>
           </div>
         </div>

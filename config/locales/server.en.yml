@@ -8,25 +8,51 @@ en:
     
   discourse_check_on:
     # Basic messages
+    plugin_title: "Discourse Check-on Plugin"
+    plugin_description: "A feature-rich Discourse example plugin that demonstrates best practices and various functionality implementations"
     welcome: "Welcome to Discourse Check-on Plugin! This is a feature-rich example plugin that demonstrates best practices in Discourse plugin development."
     greeting: "Hello, %{username}! Welcome to our plugin."
-    
+
+    # Status related
+    status_enabled: "Enabled"
+    status_disabled: "Disabled"
+    enabled: "Enabled"
+    disabled: "Disabled"
+
+    # Settings related
+    current_settings: "Current Settings"
+    feature_level: "Feature Level"
+    auto_greeting: "Auto Greeting"
+
+    # Feature levels
+    feature_levels:
+      basic: "Basic"
+      advanced: "Advanced"
+      premium: "Premium"
+
+    # Page content
+    about_plugin: "About Plugin"
+    available_features: "Available Features"
+    version: "Version"
+    author: "Author"
+    github_repo: "GitHub Repository"
+
     # Error messages
     admin_required: "This action requires administrator privileges"
     plugin_not_enabled: "Plugin is not enabled"
     invalid_request: "Invalid request"
-    
+
     # Log messages
     user_created: "New user created: %{username}"
     topic_created: "New topic created: %{title}"
     plugin_enabled: "Discourse Check-on Plugin has been enabled"
     plugin_disabled: "Discourse Check-on Plugin has been disabled"
-    
+
     # Status messages
     status_updated: "Status updated"
     settings_saved: "Settings saved"
     data_refreshed: "Data refreshed"
-    
+
     # Feature descriptions
     features:
       basic: "Basic features include user greetings and basic statistics"

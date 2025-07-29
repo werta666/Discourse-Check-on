@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Discourse Check-on 插件测试页面</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: linear-gradient(135deg, #007bff, #17a2b8);
+      color: white;
+      border-radius: 8px;
+    }
+    .status {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border-left: 4px solid #007bff;
+      background: #f8f9fa;
+    }
+    .success { border-left-color: #28a745; background: #d4edda; }
+    .error { border-left-color: #dc3545; background: #f8d7da; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎉 Discourse Check-on 插件</h1>
+      <p>插件页面加载成功！</p>
+    </div>
+    
+    <div class="status success">
+      <h3>✅ 路由工作正常</h3>
+      <p>如果您能看到这个页面，说明插件的路由配置是正确的。</p>
+    </div>
+    
+    <div class="status">
+      <h3>📊 插件状态</h3>
+      <ul>
+        <li><strong>插件启用状态:</strong> <%= @plugin_data ? (@plugin_data[:enabled] ? '✅ 已启用' : '❌ 已禁用') : '❓ 未知' %></li>
+        <li><strong>功能级别:</strong> <%= @plugin_data ? @plugin_data[:feature_level] : '未知' %></li>
+        <li><strong>自动问候:</strong> <%= @plugin_data ? (@plugin_data[:auto_greeting] ? '✅ 已启用' : '❌ 已禁用') : '❓ 未知' %></li>
+      </ul>
+    </div>
+    
+    <div class="status">
+      <h3>🔧 调试信息</h3>
+      <ul>
+        <li><strong>当前时间:</strong> <%= Time.current %></li>
+        <li><strong>插件数据:</strong> <%= @plugin_data ? '✅ 已加载' : '❌ 未加载' %></li>
+        <li><strong>用户状态:</strong> <%= current_user ? "已登录 (#{current_user.username})" : '未登录' %></li>
+      </ul>
+    </div>
+    
+    <div class="status">
+      <h3>🔗 相关链接</h3>
+      <ul>
+        <li><a href="/discourse-check-on/api">API 数据</a></li>
+        <li><a href="/discourse-check-on/stats">统计信息</a></li>
+        <li><a href="https://github.com/werta666/Discourse-Check-on" target="_blank">GitHub 仓库</a></li>
+      </ul>
+    </div>
+    
+    <% if @plugin_data %>
+    <div class="status">
+      <h3>📋 完整插件数据</h3>
+      <pre style="background: #f8f9fa; padding: 15px; border-radius: 5px; overflow-x: auto;"><%= JSON.pretty_generate(@plugin_data) %></pre>
+    </div>
+    <% end %>
+  </div>
+</body>
+</html>

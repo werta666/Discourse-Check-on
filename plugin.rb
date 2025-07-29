@@ -62,8 +62,12 @@ after_initialize do
   end
 
   # 添加自定义路由
+  add_admin_route 'discourse_check_on.plugin_title', 'discourse-check-on'
+
   Discourse::Application.routes.append do
+    get "/admin/plugins/discourse-check-on" => "discourse_check_on#index"
     get "/discourse-check-on" => "discourse_check_on#index"
+    get "/discourse-check-on/test" => "discourse_check_on#test"
     post "/discourse-check-on/toggle" => "discourse_check_on#toggle"
     get "/discourse-check-on/stats" => "discourse_check_on#stats"
     get "/discourse-check-on/api" => "discourse_check_on#api_data"
@@ -74,23 +78,54 @@ after_initialize do
   # 创建自定义控制器
   class ::DiscourseCheckOnController < ::ApplicationController
     requires_plugin PLUGIN_NAME
-    before_action :ensure_logged_in, except: [:index]
+    skip_before_action :verify_authenticity_token, only: [:toggle]
+    before_action :ensure_logged_in, except: [:index, :api_data, :test]
 
     def index
-      # 渲染实际的页面而不是JSON
+      Rails.logger.info "Discourse Check-on: 访问 index 页面"
+
+      begin
+        # 渲染实际的页面而不是JSON
+        @plugin_data = {
+          message: I18n.t("discourse_check_on.welcome", default: "欢迎使用 Discourse Check-on 插件！"),
+          enabled: SiteSetting.discourse_check_on_enabled,
+          feature_level: SiteSetting.discourse_check_on_feature_level || 'basic',
+          auto_greeting: SiteSetting.discourse_check_on_auto_greeting,
+          display_stats: SiteSetting.discourse_check_on_display_stats,
+          custom_message: SiteSetting.discourse_check_on_custom_message || "默认自定义消息"
+        }
+
+        Rails.logger.info "Discourse Check-on: 插件数据已准备 - #{@plugin_data}"
+
+        respond_to do |format|
+          format.html do
+            Rails.logger.info "Discourse Check-on: 渲染 HTML 页面"
+            render template: "discourse_check_on/index", layout: "application"
+          end
+          format.json { render json: @plugin_data }
+        end
+      rescue => e
+        Rails.logger.error "Discourse Check-on Controller Error: #{e.message}"
+        Rails.logger.error e.backtrace.join("\n")
+
+        respond_to do |format|
+          format.html { render plain: "插件页面加载错误: #{e.message}\n\n#{e.backtrace.join("\n")}", status: 500 }
+          format.json { render json: { error: e.message }, status: 500 }
+        end
+      end
+    end
+
+    def test
       @plugin_data = {
-        message: I18n.t("discourse_check_on.welcome"),
+        message: "测试页面数据",
         enabled: SiteSetting.discourse_check_on_enabled,
-        feature_level: SiteSetting.discourse_check_on_feature_level,
+        feature_level: SiteSetting.discourse_check_on_feature_level || 'basic',
         auto_greeting: SiteSetting.discourse_check_on_auto_greeting,
         display_stats: SiteSetting.discourse_check_on_display_stats,
-        custom_message: SiteSetting.discourse_check_on_custom_message
+        custom_message: SiteSetting.discourse_check_on_custom_message || "默认自定义消息"
       }
 
-      respond_to do |format|
-        format.html { render "discourse_check_on/index" }
-        format.json { render json: @plugin_data }
-      end
+      render template: "discourse_check_on/test", layout: false
     end
 
     def api_data
