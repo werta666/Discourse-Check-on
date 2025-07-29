@@ -9,9 +9,10 @@
 
 enabled_site_setting :discourse_check_on_enabled
 
-register_asset "stylesheets/common/discourse-check-on.scss"
-register_asset "stylesheets/desktop/discourse-check-on-desktop.scss", :desktop
-register_asset "stylesheets/mobile/discourse-check-on-mobile.scss", :mobile
+register_svg_icon "check-circle" if respond_to?(:register_svg_icon)
+register_svg_icon "times-circle" if respond_to?(:register_svg_icon)
+register_svg_icon "sync" if respond_to?(:register_svg_icon)
+register_svg_icon "fab-github" if respond_to?(:register_svg_icon)
 
 PLUGIN_NAME ||= "discourse-check-on".freeze
 
@@ -68,24 +69,7 @@ after_initialize do
     get "/discourse-check-on/api" => "discourse_check_on#api_data"
   end
 
-  # 添加helper方法
-  module ::DiscourseCheckOnHelper
-    def render_discourse_check_on_panel
-      content_tag :div, class: "discourse-check-on-panel-wrapper" do
-        content_tag :div, "", id: "discourse-check-on-panel",
-                    data: {
-                      enabled: SiteSetting.discourse_check_on_enabled,
-                      feature_level: SiteSetting.discourse_check_on_feature_level,
-                      auto_greeting: SiteSetting.discourse_check_on_auto_greeting
-                    }
-      end
-    end
-  end
 
-  # 注册helper
-  ApplicationController.class_eval do
-    helper DiscourseCheckOnHelper
-  end
 
   # 创建自定义控制器
   class ::DiscourseCheckOnController < ::ApplicationController

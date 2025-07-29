@@ -4,6 +4,102 @@
   end
 %>
 
+<style>
+  .discourse-check-on-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .discourse-check-on-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px;
+    background: linear-gradient(135deg, #007bff, #17a2b8);
+    color: white;
+    border-radius: 12px;
+  }
+
+  .discourse-check-on-header h1 {
+    margin: 0 0 15px 0;
+    font-size: 2.5em;
+    font-weight: 700;
+  }
+
+  .discourse-check-on-header .plugin-description {
+    font-size: 1.2em;
+    opacity: 0.9;
+    margin: 0;
+  }
+
+  .discourse-check-on-panel {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .plugin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+  }
+
+  .plugin-status.enabled {
+    background: #28a745;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .plugin-status.disabled {
+    background: #dc3545;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .plugin-message {
+    background: #f8f9fa;
+    border-left: 4px solid #007bff;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .settings-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .settings-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .plugin-meta {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    flex-wrap: wrap;
+  }
+</style>
+
 <div class="discourse-check-on-page">
   <div class="container">
     <div class="discourse-check-on-header">
@@ -13,109 +109,59 @@
 
     <!-- 插件面板组件 -->
     <div id="discourse-check-on-panel-container">
-      <%= render_discourse_check_on_panel %>
+      <div class="discourse-check-on-panel">
+        <div class="plugin-header">
+          <h2><%= t("discourse_check_on.plugin_title") %></h2>
+          <div class="plugin-status <%= @plugin_data[:enabled] ? 'enabled' : 'disabled' %>">
+            <% if @plugin_data[:enabled] %>
+              ✓ <%= t("discourse_check_on.status_enabled") %>
+            <% else %>
+              ✗ <%= t("discourse_check_on.status_disabled") %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="plugin-message">
+          <p><%= @plugin_data[:message] %></p>
+        </div>
+
+        <div class="plugin-settings">
+          <h3><%= t("discourse_check_on.current_settings") %></h3>
+          <ul class="settings-list">
+            <li>
+              <strong><%= t("discourse_check_on.feature_level") %>:</strong>
+              <span class="feature-level-<%= @plugin_data[:feature_level] %>">
+                <%= t("discourse_check_on.feature_levels.#{@plugin_data[:feature_level]}") %>
+              </span>
+            </li>
+            <li>
+              <strong><%= t("discourse_check_on.auto_greeting") %>:</strong>
+              <%= @plugin_data[:auto_greeting] ? t("discourse_check_on.enabled") : t("discourse_check_on.disabled") %>
+            </li>
+          </ul>
+        </div>
+
+        <div class="plugin-info">
+          <h3><%= t("discourse_check_on.about_plugin") %></h3>
+          <p><%= t("discourse_check_on.plugin_description") %></p>
+          <div class="plugin-meta">
+            <span class="version"><%= t("discourse_check_on.version") %>: 1.0.0</span>
+            <span class="author"><%= t("discourse_check_on.author") %>: Pandacc</span>
+            <a href="https://github.com/werta666/Discourse-Check-on" target="_blank" class="github-link">
+              GitHub <%= t("discourse_check_on.github_repo") %>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- 功能展示区域 -->
+    <!-- 简化的功能展示 -->
     <div class="discourse-check-on-features">
       <h2><%= t("discourse_check_on.available_features") %></h2>
-      
-      <div class="features-grid">
-        <div class="feature-card <%= 'active' if @plugin_data[:enabled] %>">
-          <div class="feature-icon">
-            <%= discourse_emoji("wave") %>
-          </div>
-          <h3><%= t("discourse_check_on.feature_greeting_title") %></h3>
-          <p><%= t("discourse_check_on.feature_greeting_desc") %></p>
-          <div class="feature-status">
-            <% if @plugin_data[:auto_greeting] %>
-              <span class="status-enabled">
-                <%= discourse_emoji("white_check_mark") %> <%= t("discourse_check_on.enabled") %>
-              </span>
-            <% else %>
-              <span class="status-disabled">
-                <%= discourse_emoji("x") %> <%= t("discourse_check_on.disabled") %>
-              </span>
-            <% end %>
-          </div>
-        </div>
-
-        <div class="feature-card <%= 'active' if @plugin_data[:display_stats] %>">
-          <div class="feature-icon">
-            <%= discourse_emoji("bar_chart") %>
-          </div>
-          <h3><%= t("discourse_check_on.feature_stats_title") %></h3>
-          <p><%= t("discourse_check_on.feature_stats_desc") %></p>
-          <div class="feature-status">
-            <% if @plugin_data[:display_stats] %>
-              <span class="status-enabled">
-                <%= discourse_emoji("white_check_mark") %> <%= t("discourse_check_on.enabled") %>
-              </span>
-            <% else %>
-              <span class="status-disabled">
-                <%= discourse_emoji("x") %> <%= t("discourse_check_on.disabled") %>
-              </span>
-            <% end %>
-          </div>
-        </div>
-
-        <div class="feature-card active">
-          <div class="feature-icon">
-            <%= discourse_emoji("gear") %>
-          </div>
-          <h3><%= t("discourse_check_on.feature_level_title") %></h3>
-          <p><%= t("discourse_check_on.feature_level_desc") %></p>
-          <div class="feature-status">
-            <span class="feature-level-badge level-<%= @plugin_data[:feature_level] %>">
-              <%= t("discourse_check_on.feature_levels.#{@plugin_data[:feature_level]}") %>
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 功能级别说明 -->
-    <div class="feature-level-info">
-      <h2><%= t("discourse_check_on.feature_level_comparison") %></h2>
-      
-      <div class="level-comparison">
-        <div class="level-item <%= 'current' if @plugin_data[:feature_level] == 'basic' %>">
-          <h3><%= t("discourse_check_on.feature_levels.basic") %></h3>
-          <ul>
-            <li><%= t("discourse_check_on.basic_feature_1") %></li>
-            <li><%= t("discourse_check_on.basic_feature_2") %></li>
-            <li><%= t("discourse_check_on.basic_feature_3") %></li>
-          </ul>
-        </div>
-
-        <div class="level-item <%= 'current' if @plugin_data[:feature_level] == 'advanced' %>">
-          <h3><%= t("discourse_check_on.feature_levels.advanced") %></h3>
-          <ul>
-            <li><%= t("discourse_check_on.advanced_feature_1") %></li>
-            <li><%= t("discourse_check_on.advanced_feature_2") %></li>
-            <li><%= t("discourse_check_on.advanced_feature_3") %></li>
-            <li><%= t("discourse_check_on.advanced_feature_4") %></li>
-          </ul>
-        </div>
-
-        <div class="level-item <%= 'current' if @plugin_data[:feature_level] == 'premium' %>">
-          <h3><%= t("discourse_check_on.feature_levels.premium") %></h3>
-          <ul>
-            <li><%= t("discourse_check_on.premium_feature_1") %></li>
-            <li><%= t("discourse_check_on.premium_feature_2") %></li>
-            <li><%= t("discourse_check_on.premium_feature_3") %></li>
-            <li><%= t("discourse_check_on.premium_feature_4") %></li>
-            <li><%= t("discourse_check_on.premium_feature_5") %></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- 自定义消息展示 -->
-    <div class="custom-message-display">
-      <h2><%= t("discourse_check_on.custom_message_title") %></h2>
-      <div class="message-box">
-        <p><%= @plugin_data[:custom_message] %></p>
+      <div class="simple-info">
+        <p>插件状态: <%= @plugin_data[:enabled] ? t("discourse_check_on.enabled") : t("discourse_check_on.disabled") %></p>
+        <p>功能级别: <%= t("discourse_check_on.feature_levels.#{@plugin_data[:feature_level]}") %></p>
+        <p>自动问候: <%= @plugin_data[:auto_greeting] ? t("discourse_check_on.enabled") : t("discourse_check_on.disabled") %></p>
       </div>
     </div>
   </div>
