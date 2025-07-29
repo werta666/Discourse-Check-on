@@ -14,16 +14,31 @@ export default {
 
       console.log("Discourse Check-on 插件已初始化");
 
-      // 添加导航栏链接 - 使用现代API
-      api.addHeaderIcon("discourse-check-on", {
-        href: "/discourse-check-on",
-        icon: "check-circle",
-        title: I18n.t("discourse_check_on.plugin_title"),
-        classNames: "discourse-check-on-header-link"
+      // 添加导航栏链接 - 使用正确的现代API
+      api.decorateWidget("header-icons:before", (helper) => {
+        const currentUser = api.getCurrentUser();
+        if (currentUser && (currentUser.admin || currentUser.moderator)) {
+          return helper.h("li", [
+            helper.h("a.icon.discourse-check-on-link", {
+              href: "/discourse-check-on",
+              title: I18n.t("discourse_check_on.plugin_title")
+            }, [
+              helper.h("svg.fa.d-icon.d-icon-check-circle", {
+                attributes: { "aria-hidden": "true" }
+              })
+            ])
+          ]);
+        }
       });
 
-      // 在主题列表前添加插件信息 - 使用现代API
-      api.renderInOutlet("topic-list-before", "discourse-check-on-stats");
+      // 在主题列表前添加插件信息
+      api.decorateWidget("topic-list:before", (helper) => {
+        const siteSettings = api.container.lookup("site-settings:main");
+
+        if (siteSettings.discourse_check_on_display_stats) {
+          return helper.attach("discourse-check-on-stats");
+        }
+      });
 
       // 添加自定义组件
       api.createWidget("discourse-check-on-stats", {
@@ -160,15 +175,13 @@ export default {
         }
       }
 
-      // 添加主题状态指示器 - 使用现代API
-      api.modifyClass("model:topic", {
-        pluginId: "discourse-check-on",
-
-        checkOnStatusIcon() {
-          if (this.check_on_status && this.check_on_status !== "normal") {
-            return this.check_on_status;
-          }
-          return null;
+      // 添加主题状态指示器
+      api.decorateWidget("topic-list-item:after", (helper) => {
+        const topic = helper.getModel();
+        if (topic && topic.check_on_status && topic.check_on_status !== "normal") {
+          return helper.attach("discourse-check-on-topic-status", {
+            status: topic.check_on_status
+          });
         }
       });
 
