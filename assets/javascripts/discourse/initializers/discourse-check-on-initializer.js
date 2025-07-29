@@ -4,7 +4,7 @@ import { popupAjaxError } from "discourse/lib/ajax-error";
 
 export default {
   name: "discourse-check-on-initializer",
-  
+
   initialize() {
     withPluginApi("0.8.31", (api) => {
       // 检查插件是否启用
@@ -14,27 +14,16 @@ export default {
 
       console.log("Discourse Check-on 插件已初始化");
 
-      // 添加导航栏链接
-      api.decorateWidget("header-icons:before", (helper) => {
-        const currentUser = api.getCurrentUser();
-        if (currentUser && currentUser.admin) {
-          return helper.attach("link", {
-            href: "/discourse-check-on",
-            className: "discourse-check-on-link",
-            icon: "check-circle",
-            title: "Discourse Check-on"
-          });
-        }
+      // 添加导航栏链接 - 使用现代API
+      api.addHeaderIcon("discourse-check-on", {
+        href: "/discourse-check-on",
+        icon: "check-circle",
+        title: I18n.t("discourse_check_on.plugin_title"),
+        classNames: "discourse-check-on-header-link"
       });
 
-      // 在主题列表前添加插件信息
-      api.decorateWidget("topic-list:before", (helper) => {
-        const siteSettings = api.container.lookup("site-settings:main");
-        
-        if (siteSettings.discourse_check_on_display_stats) {
-          return helper.attach("discourse-check-on-stats");
-        }
-      });
+      // 在主题列表前添加插件信息 - 使用现代API
+      api.renderInOutlet("topic-list-before", "discourse-check-on-stats");
 
       // 添加自定义组件
       api.createWidget("discourse-check-on-stats", {
@@ -54,7 +43,9 @@ export default {
           return ["discourse-check-on-widget"];
         },
 
-        html(attrs, state) {
+        html(_attrs, state) {
+          const h = this.h;
+
           if (state.loading) {
             return [
               this.attach("button", {
@@ -126,34 +117,58 @@ export default {
       });
 
       // 为新用户显示欢迎消息
-      if (api.getCurrentUser() && api.container.lookup("site-settings:main").discourse_check_on_auto_greeting) {
-        const currentUser = api.getCurrentUser();
-        if (currentUser.created_at) {
+      const currentUser = api.getCurrentUser();
+      const siteSettings = api.container.lookup("site-settings:main");
+
+      if (currentUser && siteSettings.discourse_check_on_enabled && siteSettings.discourse_check_on_auto_greeting) {
+        // 检查是否已经显示过欢迎消息
+        const welcomeShownKey = `discourse_check_on_welcome_shown_${currentUser.id}`;
+        const hasShownWelcome = localStorage.getItem(welcomeShownKey);
+
+        if (!hasShownWelcome && currentUser.created_at) {
           const createdDate = new Date(currentUser.created_at);
           const now = new Date();
           const daysSinceCreation = (now - createdDate) / (1000 * 60 * 60 * 24);
-          
+
           // 如果用户注册不到7天，显示欢迎消息
           if (daysSinceCreation <= 7) {
             setTimeout(() => {
-              const customMessage = api.container.lookup("site-settings:main").discourse_check_on_custom_message;
+              const customMessage = siteSettings.discourse_check_on_custom_message;
+              const message = customMessage || I18n.t("discourse_check_on.welcome_message", { username: currentUser.username });
+
+              // 根据功能级别显示不同的欢迎内容
+              let welcomeContent = message;
+              const featureLevel = siteSettings.discourse_check_on_feature_level;
+
+              if (featureLevel === 'advanced') {
+                welcomeContent += "<br><br>" + I18n.t("discourse_check_on.advanced_welcome_bonus");
+              } else if (featureLevel === 'premium') {
+                welcomeContent += "<br><br>" + I18n.t("discourse_check_on.premium_welcome_bonus");
+              }
+
               bootbox.alert({
                 title: I18n.t("discourse_check_on.welcome_title"),
-                message: customMessage || I18n.t("discourse_check_on.welcome_message", { username: currentUser.username }),
-                className: "discourse-check-on-welcome-modal"
+                message: welcomeContent,
+                className: "discourse-check-on-welcome-modal",
+                callback: function() {
+                  // 标记已显示过欢迎消息
+                  localStorage.setItem(welcomeShownKey, 'true');
+                }
               });
-            }, 2000);
+            }, 3000);
           }
         }
       }
 
-      // 添加主题状态指示器
-      api.decorateWidget("topic-list-item:after", (helper) => {
-        const topic = helper.getModel();
-        if (topic && topic.check_on_status && topic.check_on_status !== "normal") {
-          return helper.attach("discourse-check-on-topic-status", {
-            status: topic.check_on_status
-          });
+      // 添加主题状态指示器 - 使用现代API
+      api.modifyClass("model:topic", {
+        pluginId: "discourse-check-on",
+
+        checkOnStatusIcon() {
+          if (this.check_on_status && this.check_on_status !== "normal") {
+            return this.check_on_status;
+          }
+          return null;
         }
       });
 
@@ -166,9 +181,12 @@ export default {
         },
 
         html(attrs) {
+          const h = this.h;
           const statusText = I18n.t(`discourse_check_on.topic_status.${attrs.status}`);
           return [
-            iconNode("info-circle"),
+            h("svg.fa.d-icon.d-icon-info-circle", {
+              attributes: { "aria-hidden": "true" }
+            }),
             h("span.status-text", statusText)
           ];
         }

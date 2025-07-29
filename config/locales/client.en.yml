@@ -71,3 +71,36 @@ en:
       
       # Other messages
       welcome: "Welcome to Discourse Check-on Plugin! This is a feature-rich example plugin."
+
+      # Page features
+      available_features: "Available Features"
+      feature_greeting_title: "User Welcome System"
+      feature_greeting_desc: "Automatically display welcome messages for new users to enhance user experience"
+      feature_stats_title: "Statistics Display"
+      feature_stats_desc: "Real-time display of community statistics and activity information"
+      feature_level_title: "Feature Level Management"
+      feature_level_desc: "Provide different feature experiences based on different levels"
+
+      # Feature level comparison
+      feature_level_comparison: "Feature Level Comparison"
+      basic_feature_1: "Basic user greeting functionality"
+      basic_feature_2: "Simple statistics display"
+      basic_feature_3: "Basic topic status tracking"
+
+      advanced_feature_1: "Advanced user welcome system"
+      advanced_feature_2: "Detailed statistical analysis"
+      advanced_feature_3: "Custom message templates"
+      advanced_feature_4: "Topic status management"
+
+      premium_feature_1: "Complete analytics dashboard"
+      premium_feature_2: "Advanced customization options"
+      premium_feature_3: "User behavior tracking"
+      premium_feature_4: "Real-time notification system"
+      premium_feature_5: "API integration support"
+
+      # Custom message
+      custom_message_title: "Current Custom Message"
+
+      # Enhanced welcome messages
+      advanced_welcome_bonus: "🎉 You're using advanced features! Enjoy more customization options and detailed statistics."
+      premium_welcome_bonus: "⭐ Welcome to Premium! You have access to the complete analytics dashboard and all advanced features."

@@ -41,18 +41,58 @@ after_initialize do
     get "/discourse-check-on" => "discourse_check_on#index"
     post "/discourse-check-on/toggle" => "discourse_check_on#toggle"
     get "/discourse-check-on/stats" => "discourse_check_on#stats"
+    get "/discourse-check-on/api" => "discourse_check_on#api_data"
+  end
+
+  # 添加helper方法
+  module ::DiscourseCheckOnHelper
+    def render_discourse_check_on_panel
+      content_tag :div, class: "discourse-check-on-panel-wrapper" do
+        content_tag :div, "", id: "discourse-check-on-panel",
+                    data: {
+                      enabled: SiteSetting.discourse_check_on_enabled,
+                      feature_level: SiteSetting.discourse_check_on_feature_level,
+                      auto_greeting: SiteSetting.discourse_check_on_auto_greeting
+                    }
+      end
+    end
+  end
+
+  # 注册helper
+  ApplicationController.class_eval do
+    helper DiscourseCheckOnHelper
   end
 
   # 创建自定义控制器
   class ::DiscourseCheckOnController < ::ApplicationController
     requires_plugin PLUGIN_NAME
+    before_action :ensure_logged_in, except: [:index]
 
     def index
+      # 渲染实际的页面而不是JSON
+      @plugin_data = {
+        message: I18n.t("discourse_check_on.welcome"),
+        enabled: SiteSetting.discourse_check_on_enabled,
+        feature_level: SiteSetting.discourse_check_on_feature_level,
+        auto_greeting: SiteSetting.discourse_check_on_auto_greeting,
+        display_stats: SiteSetting.discourse_check_on_display_stats,
+        custom_message: SiteSetting.discourse_check_on_custom_message
+      }
+
+      respond_to do |format|
+        format.html { render "discourse_check_on/index" }
+        format.json { render json: @plugin_data }
+      end
+    end
+
+    def api_data
       render json: {
         message: I18n.t("discourse_check_on.welcome"),
         enabled: SiteSetting.discourse_check_on_enabled,
         feature_level: SiteSetting.discourse_check_on_feature_level,
-        auto_greeting: SiteSetting.discourse_check_on_auto_greeting
+        auto_greeting: SiteSetting.discourse_check_on_auto_greeting,
+        display_stats: SiteSetting.discourse_check_on_display_stats,
+        custom_message: SiteSetting.discourse_check_on_custom_message
       }
     end
 

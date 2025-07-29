@@ -16,8 +16,8 @@ export default Component.extend({
   @action
   loadPluginData() {
     this.set("isLoading", true);
-    
-    ajax("/discourse-check-on")
+
+    ajax("/discourse-check-on/api")
       .then((result) => {
         this.set("pluginData", result);
         this.set("isLoading", false);
