@@ -5,6 +5,7 @@ import { inject as service } from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
 import DButton from "discourse/components/d-button";
+import I18n from "I18n";
 
 export default class DiscourseCheckOnStats extends Component {
   @service siteSettings;

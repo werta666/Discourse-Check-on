@@ -6,7 +6,6 @@
 # authors: Pandacc
 # url: https://github.com/werta666/Discourse-Check-on
 # required_version: 2.7.0
-# transpile_js: true
 
 enabled_site_setting :discourse_check_on_enabled
 

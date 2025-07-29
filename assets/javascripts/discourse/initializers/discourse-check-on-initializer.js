@@ -1,5 +1,6 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 import DiscourseCheckOnHeaderIcon from "../components/discourse-check-on-header-icon";
+import I18n from "I18n";
 
 export default {
   name: "discourse-check-on-initializer",
@@ -13,8 +14,19 @@ export default {
 
       console.log("Discourse Check-on 插件已初始化");
 
-      // 添加导航栏链接 - 使用新的headerIcons API
-      api.headerIcons.add("discourse-check-on", DiscourseCheckOnHeaderIcon, { before: "search" });
+      // 添加导航栏链接 - 使用兼容的API
+      try {
+        if (api.headerIcons && api.headerIcons.add) {
+          api.headerIcons.add("discourse-check-on", DiscourseCheckOnHeaderIcon, { before: "search" });
+        } else {
+          // 回退到旧的API
+          api.decorateWidget("header-icons:before", helper => {
+            return helper.h(DiscourseCheckOnHeaderIcon);
+          });
+        }
+      } catch (error) {
+        console.warn("Discourse Check-on: 无法添加导航栏图标", error);
+      }
 
       // 为新用户显示欢迎消息
       const currentUser = api.getCurrentUser();

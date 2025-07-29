@@ -1,10 +1,13 @@
 import Component from "@ember/component";
 import { action } from "@ember/object";
+import { inject as service } from "@ember/service";
 import { ajax } from "discourse/lib/ajax";
 import { popupAjaxError } from "discourse/lib/ajax-error";
+import I18n from "I18n";
 
 export default Component.extend({
   classNames: ["discourse-check-on-panel"],
+  currentUser: service(),
   
   init() {
     this._super(...arguments);
