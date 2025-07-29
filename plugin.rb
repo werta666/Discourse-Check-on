@@ -17,6 +17,12 @@ register_asset "stylesheets/mobile/discourse-check-on-mobile.scss", :mobile
 PLUGIN_NAME ||= "discourse-check-on".freeze
 
 after_initialize do
+  # 注册自定义字段类型
+  register_topic_custom_field_type("check_on_status", :string)
+
+  # 预加载自定义字段以避免N+1查询
+  add_preloaded_topic_list_custom_field("check_on_status")
+
   # 扩展用户模型，添加自定义方法
   User.class_eval do
     def check_on_greeting
@@ -111,9 +117,7 @@ after_initialize do
         total_users: User.count,
         active_users: User.where("last_seen_at > ?", 1.week.ago).count,
         total_topics: Topic.count,
-        check_on_topics: Topic.joins(:_custom_fields)
-                              .where(topic_custom_fields: { name: "check_on_status" })
-                              .count
+        check_on_topics: TopicCustomField.where(name: "check_on_status").count
       }
       render json: stats
     end
@@ -127,6 +131,11 @@ after_initialize do
   # 添加主题序列化器扩展
   add_to_serializer(:topic_view, :check_on_status) do
     object.topic.check_on_status if SiteSetting.discourse_check_on_enabled
+  end
+
+  # 添加主题列表序列化器扩展
+  add_to_serializer(:topic_list_item, :check_on_status) do
+    object.check_on_status if SiteSetting.discourse_check_on_enabled
   end
 
   # 监听用户创建事件
